@@ -1,4 +1,3 @@
-const { Console } = require("console");
 const Product = require("../models/sauces.js")
 const unlink = require("fs").promises.unlink;
 

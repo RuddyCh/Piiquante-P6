@@ -1,4 +1,4 @@
-const {app, express} = require("./app");
+const {app, express} = require("./server");
 const {productsRouter} = require("./routes/products.routes");
 const {authRouter} = require("./routes/auth.routes");
 const port = 3000;
