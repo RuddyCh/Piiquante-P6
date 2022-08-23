@@ -91,9 +91,17 @@ function likeSauce(req, res) {
 
     switch (like) {
         case 1:
-            Product.updateOne({_id: sauceId}, { $push: { usersLiked: userId }, $inc: { likes: +1 }})
-            .then(() => res.status(200).send({message: "product liked"}))
-            .catch(err => res.status(400).send({ error }))
+            Product.findOne({ _id: sauceId })
+            .then((product) => {
+                if (product.usersLiked.includes(userId)) {
+                        res.status(400).send({message: "you already liked this sauce"})
+                }
+                else {
+                    Product.updateOne({ _id: sauceId }, { $push: { usersLiked: userId }, $inc: { likes: +1 } })
+                    .then(() => res.status(200).send({ message: "product liked" }))
+                    .catch(err => res.status(500).send({ message: "error", error: err }))
+                }
+            })
 
             break;
         
@@ -116,9 +124,17 @@ function likeSauce(req, res) {
             break;
 
         case -1:
-            Product.updateOne({_id: sauceId}, { $push: { usersDisliked: userId }, $inc: { dislikes: +1 }})
-            .then(() => res.status(200).send({message: "product disliked"}))
-            .catch(err => res.status(400).send({ error }))
+            Product.findOne({ _id: sauceId })
+                .then((product) => {
+                    if (product.usersDisliked.includes(userId)) {
+                        res.status(400).send({ message: "you already liked this sauce" })
+                    }
+                    else {
+                        Product.updateOne({_id: sauceId}, { $push: { usersDisliked: userId }, $inc: { dislikes: +1 }})
+                        .then(() => res.status(200).send({message: "product disliked"}))
+                        .catch(err => res.status(500).send({message: "error", error: err}))
+                    }
+                })
 
             break;
 
